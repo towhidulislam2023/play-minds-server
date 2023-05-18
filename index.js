@@ -17,7 +17,7 @@ app.get('/gallery', (req, res) => {
 // console.log(process.env.DB_ACCESS_USER_ID);
 // console.log(process.env.DB_ACCESS_PASS);
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = `mongodb+srv://${process.env.DB_ACCESS_USER_ID}:${process.env.DB_ACCESS_PASS}@cluster0.w8zzyxt.mongodb.net/?retryWrites=true&w=majority`;
 
 
@@ -54,6 +54,12 @@ async function run() {
             res.send(result)
         })
 
+        app.get("/viewdetails/:id", async (req,res)=>{
+            const id=req.params.id
+            const query={_id: new ObjectId(id)}
+            const result =await playMindsToysCollection.findOne(query)
+            res.send(result)
+        })
 
 
 
