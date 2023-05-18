@@ -53,15 +53,6 @@ async function run() {
             const result = await cursor.toArray()
             res.send(result)
         })
-        // app.get("/alltoys", async (req, res) => {
-        //     const limit = req.query.limit || 2;
-
-        //     const projection = { _id: 1, pictureURL: 1, name: 1, price: 1, sellerEmail: 1, sellerName: 1, subcategory: 1, availableQuantity: 1 };
-
-        //     const result = await playMindsToysCollection.find().limit(parseInt(limit)).project(projection).toArray();
-
-        //     res.send(result);
-        // });
 
         app.get("/alltoys", async (req, res) => {
             const limit = req.query.limit || 20;
@@ -125,6 +116,12 @@ async function run() {
                 },
             };
             const result = await playMindsToysCollection.updateOne(filter,updateDoc,options)
+            res.send(result)
+        })
+        app.delete("/dellettoy/:id",async(req,res)=>{
+            const id=req.params.id 
+            const query = {_id: new ObjectId(id)}
+            const result= await playMindsToysCollection.deleteOne(query)
             res.send(result)
         })
 
