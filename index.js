@@ -64,7 +64,7 @@ async function run() {
         // });
 
         app.get("/alltoys", async (req, res) => {
-            const limit = req.query.limit || 2;
+            const limit = req.query.limit || 20;
             const sortType = req.query.sort || ""
             const searchTerm = req.query.title || "";
             let sortOrder;
@@ -84,10 +84,6 @@ async function run() {
         });
 
 
-
-
-
-
         app.get("/viewdetails/:id", async (req, res) => {
             const id = req.params.id
             const query = { _id: new ObjectId(id) }
@@ -95,6 +91,42 @@ async function run() {
             res.send(result)
         })
 
+        app.post('/newPost', async (req,res)=>{
+            const doc=req.body 
+            const result =await playMindsToysCollection.insertOne(doc)
+            res.send(result)
+        })
+        
+        app.get("/myAddedtoys", async (req,res)=>{
+            let query={}
+            if (req.query?.email) {
+                query = { sellerEmail: req.query.email}
+                
+            }
+
+            const result=await playMindsToysCollection.find(query).toArray()
+            res.send(result)
+        })
+
+        app.put("/updateInfo/:id",async(req,res)=>{
+            const id=req.params.id
+            const doc=req.body
+            const filter={_id: new ObjectId(id)}
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: {
+                    pictureURL:doc.pictureURL,
+                    name:doc.name,
+                    price:doc.price,
+                    rating:doc.rating,
+                    availableQuantity:doc.availableQuantity,
+                    subcategory:doc.subcategory,
+                    description:doc.description
+                },
+            };
+            const result = await playMindsToysCollection.updateOne(filter,updateDoc,options)
+            res.send(result)
+        })
 
 
 
