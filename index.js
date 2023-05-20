@@ -89,13 +89,25 @@ async function run() {
         })
         
         app.get("/myAddedtoys", async (req,res)=>{
+            const sortType = req.query.sort || ""
+
+            let sortOrder;
+            if (sortType === "ascending") {
+                sortOrder = 1;
+            } else if (sortType === "descending") {
+                sortOrder = -1;
+            } 
+
             let query={}
             if (req.query?.email) {
                 query = { sellerEmail: req.query.email}
                 
             }
+            const options = {
+                sort: { price: sortOrder },
+            };
 
-            const result=await playMindsToysCollection.find(query).toArray()
+            const result = await playMindsToysCollection.find(query, options).toArray()
             res.send(result)
         })
 
