@@ -67,7 +67,7 @@ async function run() {
             const searchFilter = searchTerm.trim() !== "" ? { name: { $regex: searchTerm, $options: "i" } } : {};
             const options = {
                 sort: { price: sortOrder },
-                projection: { _id: 1, pictureURL: 1, name: 1, price: 1, sellerEmail: 1, sellerName: 1, subcategory: 1, availableQuantity: 1 }
+                projection: { _id: 1, pictureURL: 1, name: 1, price: 1, sellerEmail: 1, sellerName: 1, subcategory: 1, availableQuantity: 1, description: 1, rating:1 }
             };
 
             const result = await playMindsToysCollection.find(searchFilter, options).limit(parseInt(limit)).toArray();
